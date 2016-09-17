@@ -3,7 +3,7 @@ import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
     render_template, flash
-
+users=100
 # create our little application :)
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -65,7 +65,8 @@ def initdb_command():
 @app.route('/')
 def show_entries():
     db = get_db()
-    cur = db.execute('select title, author, description from cards order by id desc')
+    cur = db.execute(
+        'select title, author, description from cards order by id desc')
     entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
 
@@ -121,7 +122,8 @@ def logout():
     flash('You were logged out')
     return redirect(url_for('show_entries'))
 
-@app.route('/like',  methods=['GET', 'POST'])
+
+@app.route('/like', methods=['GET', 'POST'])
 def vote():
     db = get_db()
     target = request.get_data()
@@ -133,11 +135,12 @@ def vote():
         if entry[0] == target:
             if entry[1] == None:
                 result = 1
-            else: result = str(int(entry[1]) + 1)
-    print result, target
-    db.execute('update cards set score=(?) where title=(?)',[result, target])
+            else:
+                result = str(int(entry[1]) + 1)
+    db.execute('update cards set score=(?) where title=(?)', [result, target])
     db.commit()
     return redirect(url_for('show_entries'))
+
 
 @app.route('/signup')
 def add_user():
@@ -148,11 +151,12 @@ def add_user():
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
 
+
 @app.route('/new_card')
 def new_card():
     db = get_db()
     author = "billy"
     db.execute('insert into cards (title, description, score, status, author, text) values (?, ?, ?, ?, ?, ?)',
-                [request.form['title']], request.form['description'], str(0), "TODO", author, "")
+               [request.form['title']], request.form['description'], str(0), "TODO", author, "")
     db.commit()
     return redirect(url_for('show_entries'))
