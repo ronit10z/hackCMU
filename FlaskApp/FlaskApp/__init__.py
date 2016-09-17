@@ -114,7 +114,8 @@ def vote():
     for entry in entries:
         if entry[0] == target:
             if entry[1] == None:
-            result = str(int(entry[1]) + 1)
+                result = 1
+            else: result = str(int(entry[1]) + 1)
     print result, target
     db.execute('update cards set score=(?) where title=(?)',[result, target])
     db.commit()
