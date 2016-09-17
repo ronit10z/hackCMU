@@ -65,12 +65,13 @@ def initdb_command():
 @app.route('/')
 def show_entries():
     db = get_db()
-<<<<<<< HEAD
-    cur = db.execute('select title, author, description from cards order by id desc')
-=======
+<< << << < HEAD
     cur = db.execute(
         'select title, author, description from cards order by id desc')
->>>>>>> 59950223ecab08ae6f58bed7db611c28b03f24db
+== == == =
+    cur = db.execute(
+        'select title, author, description from cards order by id desc')
+>>>>>> > 59950223ecab08ae6f58bed7db611c28b03f24db
     entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
 
@@ -108,8 +109,10 @@ def logout():
     flash('You were logged out')
     return redirect(url_for('show_entries'))
 
-<<<<<<< HEAD
-@app.route('/like',  methods=['GET', 'POST'])
+<< << << < HEAD
+
+
+@app.route('/like', methods=['GET', 'POST'])
 def vote():
     db = get_db()
     target = request.get_data()
@@ -123,11 +126,12 @@ def vote():
                 result = 1
             else: result = str(int(entry[1]) + 1)
     print result, target
-    db.execute('update cards set score=(?) where title=(?)',[result, target])
+    db.execute('update cards set score=(?) where title=(?)', [result, target])
     db.commit()
     return redirect(url_for('show_entries'))
 
-=======
+== == == =
+
 
 @app.route('/like', methods=['GET', 'POST'])
 def vote():
@@ -145,7 +149,9 @@ def vote():
     return redirect(url_for('show_entries'))
 
 
->>>>>>> 59950223ecab08ae6f58bed7db611c28b03f24db
+>>>>>> > 59950223ecab08ae6f58bed7db611c28b03f24db
+
+
 @app.route('/signup')
 def add_user():
     db = get_db()
@@ -155,19 +161,21 @@ def add_user():
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
 
-<<<<<<< HEAD
-=======
+<< << << < HEAD
+== == == =
 
->>>>>>> 59950223ecab08ae6f58bed7db611c28b03f24db
+>>>>>> > 59950223ecab08ae6f58bed7db611c28b03f24db
+
+
 @app.route('/new_card')
 def new_card():
     db = get_db()
     author = "billy"
     db.execute('insert into cards (title, description, score, status, author, text) values (?, ?, ?, ?, ?, ?)',
-<<<<<<< HEAD
+<< << << < HEAD
                 [request.form['title']], request.form['description'], str(0), "TODO", author, "")
-=======
+== == == =
                [request.form['title']], request.form['description'], str(0), "TODO", author, "")
->>>>>>> 59950223ecab08ae6f58bed7db611c28b03f24db
+>> >>>> > 59950223ecab08ae6f58bed7db611c28b03f24db
     db.commit()
     return redirect(url_for('show_entries'))
