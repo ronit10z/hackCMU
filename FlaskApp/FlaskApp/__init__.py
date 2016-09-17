@@ -11,7 +11,7 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 
 if __name__ == "__main__":
     app.run()
-
+users = 100#mods the hash
 # Load default config and override config from an environment variable
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'cards.db'),
@@ -86,19 +86,32 @@ def add_entry():
 def login():
     error = None
     db = get_db()
+
     if request.method == 'POST':
-        if request.form['username']:
-            username = request.form['username']
-            query = db.execute(
-                "SELECT id FROM user_data WHERE username = " + username)
-            if not(query):
-                error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
-        else:
+        username = request.form['username']
+        password = request.form['password']
+        hashid = abs(hash(username)) % users
+        authenticated = False
+        user_id = -1
+        try:
+            temp = db.execute(
+                "SELECT id FROM user_data where id=" + str(hashid))
+            user_id = temp.fetchone()[0]
+        except:
+            user_id = -2
+            error = "User invalid"
+        if user_id > 0:
+            user_pd = db.execute(
+                "SELECT password FROM user_data where id=" + str(hashid))
+            user_pd = user_pd.fetchone()[0]
+            if user_pd == password:
+                authenticated = True
+        if authenticated:
             session['logged_in'] = True
             flash('You were logged in')
             return redirect(url_for('show_entries'))
+        if user_id == -2:
+            error = "Invalid username or password"
     return render_template('login.html', error=error)
 
 
