@@ -65,7 +65,12 @@ def initdb_command():
 @app.route('/')
 def show_entries():
     db = get_db()
+<<<<<<< HEAD
     cur = db.execute('select title, author, description from cards order by id desc')
+=======
+    cur = db.execute(
+        'select title, author, description from cards order by id desc')
+>>>>>>> 59950223ecab08ae6f58bed7db611c28b03f24db
     entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
 
@@ -103,6 +108,7 @@ def logout():
     flash('You were logged out')
     return redirect(url_for('show_entries'))
 
+<<<<<<< HEAD
 @app.route('/like',  methods=['GET', 'POST'])
 def vote():
     db = get_db()
@@ -121,6 +127,25 @@ def vote():
     db.commit()
     return redirect(url_for('show_entries'))
 
+=======
+
+@app.route('/like', methods=['GET', 'POST'])
+def vote():
+    db = get_db()
+    print request.get_data()
+    target = request.form['like']
+    print target
+    cur = db.execute("select id, score from cards order by id desc")
+    entries = cur.fetchall()
+    for entry in entries:
+        if entry[0] == target:
+            result = str(int(entry[1]) + 1)
+    db.execute('update cards set score=result where id=target')
+    db.commit()
+    return redirect(url_for('show_entries'))
+
+
+>>>>>>> 59950223ecab08ae6f58bed7db611c28b03f24db
 @app.route('/signup')
 def add_user():
     db = get_db()
@@ -130,11 +155,19 @@ def add_user():
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 59950223ecab08ae6f58bed7db611c28b03f24db
 @app.route('/new_card')
 def new_card():
     db = get_db()
     author = "billy"
     db.execute('insert into cards (title, description, score, status, author, text) values (?, ?, ?, ?, ?, ?)',
+<<<<<<< HEAD
                 [request.form['title']], request.form['description'], str(0), "TODO", author, "")
+=======
+               [request.form['title']], request.form['description'], str(0), "TODO", author, "")
+>>>>>>> 59950223ecab08ae6f58bed7db611c28b03f24db
     db.commit()
     return redirect(url_for('show_entries'))
