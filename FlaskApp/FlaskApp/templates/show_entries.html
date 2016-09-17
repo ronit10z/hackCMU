@@ -13,7 +13,10 @@
   {% endif %}
   <ul class=entries>
   {% for entry in entries %}
-    <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
+    <li id={{entry.title}}><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
+    {% if session.logged_in %}
+      <button class="likebutton" action="like" id=like_{{entry.title}}>like</button>
+    {% endif %}
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em>
   {% endfor %}

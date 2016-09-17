@@ -65,9 +65,8 @@ def initdb_command():
 @app.route('/')
 def show_entries():
     db = get_db()
-    cur = db.execute('select title, author, description from entries order by id desc')
+    cur = db.execute('select title, author, description from cards order by id desc')
     entries = cur.fetchall()
-    print entries, type(entries)
     return render_template('show_entries.html', entries=entries)
 
 
@@ -104,10 +103,12 @@ def logout():
     flash('You were logged out')
     return redirect(url_for('show_entries'))
 
-@app.route('/vote')
+@app.route('/like',  methods=['GET', 'POST'])
 def vote():
     db = get_db()
-    target = str(1)
+    print request.get_data()
+    target = request.form['like']
+    print target
     cur = db.execute("select id, score from cards order by id desc")
     entries = cur.fetchall()
     for entry in entries:
@@ -117,11 +118,11 @@ def vote():
     db.commit()
     return redirect(url_for('show_entries'))
 
-@app.route('/add_user')
+@app.route('/signup')
 def add_user():
     db = get_db()
-    db.execute('insert into user_data (name, password) values (?, ?, ?)',
-               [request.form['name'], request.form['password'])
+    db.execute('insert into user_data (name, password, rating, up) values (?, ?, ?)',
+               request.form['name'], request.form['password'])
     db.commit()
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
@@ -134,6 +135,3 @@ def new_card():
                 [request.form['title']], request.form['description'], str(0), "TODO", author, "")
     db.commit()
     return redirect(url_for('show_entries'))
-
-@app.route('/add_text')
-def 
