@@ -11,7 +11,7 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 
 if __name__ == "__main__":
     app.run()
-users = 100#mods the hash
+users = 100  # mods the hash
 # Load default config and override config from an environment variable
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'cards.db'),
