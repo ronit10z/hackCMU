@@ -65,8 +65,9 @@ def initdb_command():
 @app.route('/')
 def show_entries():
     db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
+    cur = db.execute('select title, author, description from entries order by id desc')
     entries = cur.fetchall()
+    print entries, type(entries)
     return render_template('show_entries.html', entries=entries)
 
 
@@ -75,8 +76,8 @@ def add_entry():
     if not session.get('logged_in'):
         abort(401)
     db = get_db()
-    db.execute('insert into entries (title, text) values (?, ?)',
-               [request.form['title'], request.form['text']])
+    db.execute('insert into entries (title, description, author) values (?, ?, ?)',
+               [request.form['title'], request.form['description'], request.form['author']])
     db.commit()
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
@@ -102,3 +103,37 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
     return redirect(url_for('show_entries'))
+
+@app.route('/vote')
+def vote():
+    db = get_db()
+    target = str(1)
+    cur = db.execute("select id, score from cards order by id desc")
+    entries = cur.fetchall()
+    for entry in entries:
+        if entry[0] == target:
+            result = str(int(entry[1]) + 1)
+    db.execute('update cards set score=result where id=target')
+    db.commit()
+    return redirect(url_for('show_entries'))
+
+@app.route('/add_user')
+def add_user():
+    db = get_db()
+    db.execute('insert into user_data (name, password) values (?, ?, ?)',
+               [request.form['name'], request.form['password'])
+    db.commit()
+    flash('New entry was successfully posted')
+    return redirect(url_for('show_entries'))
+
+@app.route('/new_card')
+def new_card():
+    db = get_db()
+    author = "billy"
+    db.execute('insert into cards (title, description, score, status, author, text) values (?, ?, ?, ?, ?, ?)',
+                [request.form['title']], request.form['description'], str(0), "TODO", author, "")
+    db.commit()
+    return redirect(url_for('show_entries'))
+
+@app.route('/add_text')
+def 
