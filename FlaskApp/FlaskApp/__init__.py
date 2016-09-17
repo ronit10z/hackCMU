@@ -134,12 +134,11 @@ def vote():
             if entry[1] == None:
                 result = 1
             else: result = str(int(entry[1]) + 1)
-    print result, target
     db.execute('update cards set score=(?) where title=(?)',[result, target])
     db.commit()
     return redirect(url_for('show_entries'))
 
-@app.route('/signup')
+@app.route('/signup', methods = ['GET', 'POST'])
 def add_user():
     db = get_db()
     db.execute('insert into user_data (name, password, rating, up) values (?, ?, ?)',
