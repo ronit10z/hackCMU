@@ -138,7 +138,7 @@ def vote():
     db.commit()
     return redirect(url_for('show_entries'))
 
-@app.route('/signup', methods = ['GET', 'POST'])
+@app.route('/signup')
 def add_user():
     db = get_db()
     db.execute('insert into user_data (name, password, rating, up) values (?, ?, ?)',
