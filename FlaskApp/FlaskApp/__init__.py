@@ -87,7 +87,7 @@ def login():
     error = None
     db = get_db()
     if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
+        if request.form['username']:
             username = request.form['username']
             query = db.execute(
                 "SELECT id FROM user_data WHERE username = " + username)
