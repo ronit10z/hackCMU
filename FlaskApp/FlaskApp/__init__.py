@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
 # Load default config and override config from an environment variable
 app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'flaskr.db'),
+    DATABASE=os.path.join(app.root_path, 'cards.db'),
     SECRET_KEY='development key',
     USERNAME='admin',
     PASSWORD='default'
