@@ -1,8 +1,12 @@
 drop table if exists entries;
-create table entries (
+create table cards (
   id integer primary key autoincrement,
   title text not null,
-  'text' text not null
+  'text' text not null,
+  description text ,
+  score integer ,
+  status text ,
+  author text 
 );
 
 create table user_data (
