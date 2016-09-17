@@ -106,15 +106,17 @@ def logout():
 @app.route('/like',  methods=['GET', 'POST'])
 def vote():
     db = get_db()
-    print request.get_data()
-    target = request.form['like']
-    print target
-    cur = db.execute("select id, score from cards order by id desc")
+    target = request.get_data()
+    target = target.split("_")[-1]
+    cur = db.execute("select title, score from cards order by id desc")
     entries = cur.fetchall()
+    result = None
     for entry in entries:
         if entry[0] == target:
+            if entry[1] == None:
             result = str(int(entry[1]) + 1)
-    db.execute('update cards set score=result where id=target')
+    print result, target
+    db.execute('update cards set score=(?) where title=(?)',[result, target])
     db.commit()
     return redirect(url_for('show_entries'))
 
